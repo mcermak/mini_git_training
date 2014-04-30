@@ -15,7 +15,7 @@
 	var ver = 'galleriffic-0.7';
 	var galleryOffset = 0;
 	var galleries = [];
-	var allImages = [];	
+	var allImages = [];
 	var historyCurrentHash;
 	var historyBackStack;
 	var historyForwardStack;
@@ -33,7 +33,7 @@
 
 	function registerGallery(gallery) {
 		galleries.push(gallery);
-		
+
 		// update the global offset value
 		galleryOffset += gallery.data.length;
 	}
@@ -46,7 +46,7 @@
 		}
 		return 0;
 	}
-	
+
 	function historyCallback() {
 		// Using present location.hash always (seems to work, unlike the hash argument passed to this callback)
 		var hash = getHash();
@@ -54,17 +54,17 @@
 
 		var gallery = getGallery(hash);
 		if (!gallery) return;
-		
+
 		var index = hash-gallery.offset;
 		gallery.goto(index);
 	}
-	
+
 	function historyInit() {
 		if (isInitialized) return;
-		isInitialized = true; 
+		isInitialized = true;
 
 		var current_hash = location.hash;
-		
+
 		historyCurrentHash = current_hash;
 		if ($.browser.msie) {
 			// To stop the callback firing twice during initilization if no hash present
@@ -81,19 +81,19 @@
 
 		setInterval(function() { historyCheck(); }, 100);
 	}
-	
+
 	function historyAddHistory(hash) {
 		// This makes the looping function do something
 		historyBackStack.push(hash);
 		historyForwardStack.length = 0; // clear forwardStack (true click occured)
 		isFirst = true;
 	}
-	
+
 	function historyCheck() {
 		if ($.browser.safari) {
 			if (!dontCheck) {
 				var historyDelta = history.length - historyBackStack.length;
-				
+
 				if (historyDelta) { // back or forward button has been pushed
 					isFirst = false;
 					if (historyDelta < 0) { // back button has been pushed
@@ -172,12 +172,12 @@
 
 			preloadInit: function() {
 				if (this.settings.preloadAhead == 0) return this;
-				
+
 				this.preloadStartIndex = this.currentIndex;
 				var nextIndex = this.getNextIndex(this.preloadStartIndex);
 				return this.preloadRecursive(this.preloadStartIndex, nextIndex);
 			},
-			
+
 			preloadRelocate: function(index) {
 				// By changing this startIndex, the current preload script will restart
 				this.preloadStartIndex = index;
@@ -207,11 +207,11 @@
 
 				// If already loaded, continue
 				if (imageData.$image)
-					return this.preloadNext(startIndex, currentIndex); 
-				
+					return this.preloadNext(startIndex, currentIndex);
+
 				// Preload the image
 				var image = new Image();
-				
+
 				image.onload = function() {
 					imageData.$image = this;
 					gallery.preloadNext(startIndex, currentIndex);
@@ -222,7 +222,7 @@
 
 				return this;
 			},
-			
+
 			preloadNext: function(startIndex, currentIndex) {
 				var nextIndex = this.getNextIndex(currentIndex);
 				if (nextIndex == startIndex) {
@@ -241,7 +241,7 @@
 					nextIndex = 0;
 				return nextIndex;
 			},
-			
+
 			getPrevIndex: function(index) {
 				var prevIndex = index-1;
 				if (prevIndex < 0)
@@ -252,14 +252,14 @@
 			pause: function() {
 				if (this.interval)
 					this.toggleSlideshow();
-				
+
 				return this;
 			},
 
 			play: function() {
 				if (!this.interval)
 					this.toggleSlideshow();
-				
+
 				return this;
 			},
 
@@ -267,7 +267,7 @@
 				if (this.interval) {
 					clearInterval(this.interval);
 					this.interval = 0;
-					
+
 					if (this.$controlsContainer) {
 						this.$controlsContainer
 							.find('div.ss-controls span').removeClass().addClass('play')
@@ -281,7 +281,7 @@
 					this.interval = setInterval(function() {
 						gallery.ssAdvance();
 					}, this.settings.delay);
-					
+
 					if (this.$controlsContainer) {
 						this.$controlsContainer
 							.find('div.ss-controls span').removeClass().addClass('pause')
@@ -296,7 +296,7 @@
 			ssAdvance: function() {
 				var nextIndex = this.getNextIndex(this.currentIndex);
 				var nextHash = this.data[nextIndex].hash;
-				
+
 				// Seems to be working on both FF and Safari
 				location.href = '#'+nextHash;
 
@@ -315,7 +315,7 @@
 				this.preloadRelocate(index);
 				return this.refresh();
 			},
-			
+
 			refresh: function() {
 				if (this.$imageContainer) {
 					var imageData = this.data[this.currentIndex];
@@ -352,7 +352,7 @@
 							gallery.buildImage(imageData.$image);
 						}
 					});
-					
+
 					if (this.onFadeOut) this.onFadeOut();
 
 					if (!imageData.$image) {
@@ -377,7 +377,7 @@
 
 				return this.syncThumbs();
 			},
-			
+
 			buildImage: function(image) {
 				if (this.$imageContainer) {
 					this.$imageContainer.empty();
@@ -392,7 +392,7 @@
 						.click(function() { clickHandler(gallery); })
 						.end()
 						.fadeIn('fast');
-					
+
 					if (this.onFadeIn) this.onFadeIn();
 				}
 
@@ -427,7 +427,7 @@
 					// Initialize currentPage to first page
 					if (this.currentPage < 0)
 						this.currentPage = 0;
-				
+
 					var startIndex = this.currentPage*this.settings.numThumbs;
 			        var stopIndex = startIndex+this.settings.numThumbs-1;
 			        if (stopIndex >= this.data.length)
@@ -437,7 +437,7 @@
 
 					// Clear thumbs container
 					this.$thumbsContainer.empty();
-				
+
 					// Rebuild top pager
 					this.$thumbsContainer.append('<div class="top pagination"></div>');
 					if (needsPagination && this.settings.enableTopPager) {
@@ -448,10 +448,10 @@
 					var $ulThumbs = this.$thumbsContainer.append('<ul class="thumbs"></ul>').find('ul.thumbs');
 					for (i=startIndex; i<=stopIndex; i++) {
 						var selected = '';
-					
+
 						if (i==this.currentIndex)
 							selected = ' class="selected"';
-						
+
 						var imageData = this.data[i];
 						$ulThumbs.append('<li'+selected+'><a rel="history" href="#'+imageData.hash+'" title="'+imageData.title+'"><img src="'+imageData.thumb+'" alt="'+imageData.title+'" /></a></li>');
 					}
@@ -472,17 +472,17 @@
 
 			buildPager: function(pager) {
 				var startIndex = this.currentPage*this.settings.numThumbs;
-				
+
 				// Prev Page Link
 				if (this.currentPage > 0) {
 					var prevPage = startIndex - this.settings.numThumbs;
 					pager.append('<a rel="history" href="#'+this.data[prevPage].hash+'" title="'+this.settings.prevPageLinkText+'">'+this.settings.prevPageLinkText+'</a>');
 				}
-				
+
 				// Page Index Links
 				for (i=this.currentPage-3; i<=this.currentPage+3; i++) {
 					var pageNum = i+1;
-					
+
 					if (i == this.currentPage)
 						pager.append('<strong>'+pageNum+'</strong>');
 					else {
@@ -492,13 +492,13 @@
 						}
 					}
 				}
-				
+
 				// Next Page Link
 				var nextPage = startIndex+this.settings.numThumbs;
 				if (nextPage < this.data.length) {
 					pager.append('<a rel="history" href="#'+this.data[nextPage].hash+'" title="'+this.settings.nextPageLinkText+'">'+this.settings.nextPageLinkText+'</a>');
 				}
-				
+
 				return this;
 			}
 		});
@@ -510,7 +510,7 @@
 			clearInterval(this.interval);
 
 		this.interval = 0;
-		
+
 		if (this.settings.imageContainerSel) this.$imageContainer = $(this.settings.imageContainerSel);
 		if (this.settings.thumbsContainerSel) this.$thumbsContainer = $(this.settings.thumbsContainerSel);
 		if (this.settings.titleContainerSel) this.$titleContainer = $(this.settings.titleContainerSel);
@@ -527,7 +527,7 @@
 			this.$thumbsContainer = $(thumbsContainerSel);
 			this.buildDataFromThumbs();
 		}
-		
+
 		// Add this gallery to the global galleries array
 		registerGallery(this);
 
@@ -540,15 +540,15 @@
 		/*
 		if (this.settings.controlsContainerSel) {
 			this.$controlsContainer = $(this.settings.controlsContainerSel).empty();
-			
+
 			if (this.settings.renderSSControls) {
 				this.$controlsContainer
 					.append('<div class="ss-controls"><span class="play" title="'+this.settings.playLinkText+'">'+this.settings.playLinkText+'</span></div>')
 					.find('div.ss-controls span')
 					.click(function() { gallery.toggleSlideshow(); });
 			}
-		
-			if (this.settings.renderNavControls) {					
+
+			if (this.settings.renderNavControls) {
 				this.$controlsContainer
 					.append('<div class="nav-controls"><a class="prev" rel="history" title="'+this.settings.prevLinkText+'">'+this.settings.prevLinkText+'</a><a class="next" rel="history" title="Next">'+this.settings.nextLinkText+'</a></div>')
 					.find('a[@rel="history"]')
@@ -567,7 +567,7 @@
 
 		// Kickoff Image Preloader after 1 second
 		setTimeout(function() { gallery.preloadInit(); }, 1000);
-		
+
 		return this;
 	};
 
